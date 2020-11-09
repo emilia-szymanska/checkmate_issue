@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 x = [
-    [0, 0, 0, 0, 1],
+    [2, 0, 0, 0, 1],
     [0, 0, 2, 0, 0], 
     [0, 1, 2, 0, 1],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
+    [0, 2, 0, 0, 0],
+    [0, 0, 0, 0, 1]
     ]
 
 import enum
@@ -82,10 +82,83 @@ class Rook:
 
 
 
+class Bishop:
+    def __init__(self, pose, color):
+        self.position = pose
+        self.color = Color[color]
+
+    def possible_moves(self, board):
+        x = self.position[0]
+        y = self.position[1]
+        size = len(board)
+        captures = []
+        free_moves = []
+        v = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+        for i in range(len(v)):
+            x = self.position[0]
+            y = self.position[1]
+            while True:
+                if x + v[i][0] < size and  x + v[i][0] >= 0 and y + v[i][1] < size and y + v[i][1] >= 0:
+                    content = board[x+v[i][0]][y+v[i][1]]
+                    if content != self.color.value:
+                        if content == 0:
+                            x = x+v[i][0] 
+                            y = y+v[i][1]
+                            free_moves.append([x, y])
+                        else:
+                            captures.append([x+v[i][0], y+v[i][1]])
+                            break
+                    else:
+                        break
+                else:
+                    break
+        return free_moves, captures
+    
+    def move(self, new_pose):
+        self.position = new_pose
+
+
+class Queen:
+    def __init__(self, pose, color):
+        self.position = pose
+        self.color = Color[color]
+
+    def possible_moves(self, board):
+        x = self.position[0]
+        y = self.position[1]
+        size = len(board)
+        captures = []
+        free_moves = []
+        v = [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]
+        for i in range(len(v)):
+            x = self.position[0]
+            y = self.position[1]
+            while True:
+                if x + v[i][0] < size and  x + v[i][0] >= 0 and y + v[i][1] < size and y + v[i][1] >= 0:
+                    content = board[x+v[i][0]][y+v[i][1]]
+                    if content != self.color.value:
+                        if content == 0:
+                            x = x+v[i][0] 
+                            y = y+v[i][1]
+                            free_moves.append([x, y])
+                        else:
+                            captures.append([x+v[i][0], y+v[i][1]])
+                            break
+                    else:
+                        break
+                else:
+                    break
+        return free_moves, captures
+    
+    def move(self, new_pose):
+        self.position = new_pose
+
 
 k = Knight([1, 2], 'black')
 r = Rook([2, 2], 'black')
-pos, cap = r.possible_moves(x)
+b = Bishop([0, 0], 'black')
+q = Queen([2, 2], 'black')
+pos, cap = q.possible_moves(x)
 print(pos)
 print(cap)
 
