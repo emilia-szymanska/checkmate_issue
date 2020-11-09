@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 
-x = [
-    [2, 0, 0, 0, 1],
-    [0, 0, 2, 0, 0], 
-    [0, 1, 2, 0, 1],
-    [0, 2, 0, 0, 0],
-    [0, 0, 0, 0, 1]
-    ]
-
 import enum
 
 class Color(enum.Enum):
@@ -51,8 +43,6 @@ class Rook:
         self.color = Color[color]
 
     def possible_moves(self, board):
-        x = self.position[0]
-        y = self.position[1]
         size = len(board)
         captures = []
         free_moves = []
@@ -88,8 +78,6 @@ class Bishop:
         self.color = Color[color]
 
     def possible_moves(self, board):
-        x = self.position[0]
-        y = self.position[1]
         size = len(board)
         captures = []
         free_moves = []
@@ -124,8 +112,6 @@ class Queen:
         self.color = Color[color]
 
     def possible_moves(self, board):
-        x = self.position[0]
-        y = self.position[1]
         size = len(board)
         captures = []
         free_moves = []
@@ -154,11 +140,47 @@ class Queen:
         self.position = new_pose
 
 
-k = Knight([1, 2], 'black')
+class King:
+    def __init__(self, pose, color):
+        self.position = pose
+        self.color = Color[color]
+
+    def possible_moves(self, board):
+        x = self.position[0]
+        y = self.position[1]
+        size = len(board)
+        captures = []
+        free_moves = []
+        v = [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]
+        for i in range(len(v)):
+            if x + v[i][0] < size and  x + v[i][0] >= 0 and y + v[i][1] < size and y + v[i][1] >= 0:
+                content = board[x+v[i][0]][y+v[i][1]]
+                if content != self.color.value:
+                    if content == 0:
+                        free_moves.append([x+v[i][0], y+v[i][1]])
+                    else:
+                        captures.append([x+v[i][0], y+v[i][1]])
+        return free_moves, captures
+    
+    def move(self, new_pose):
+        self.position = new_pose
+
+
+
+
+
+x = [
+    [2, 0, 0, 0, 1],
+    [0, 0, 2, 0, 0], 
+    [0, 1, 2, 0, 1],
+    [0, 2, 0, 0, 0],
+    [0, 0, 0, 0, 1]
+    ]
+
 r = Rook([2, 2], 'black')
 b = Bishop([0, 0], 'black')
-q = Queen([2, 2], 'black')
-pos, cap = q.possible_moves(x)
+k = King([2, 2], 'black')
+pos, cap = k.possible_moves(x)
 print(pos)
 print(cap)
 
