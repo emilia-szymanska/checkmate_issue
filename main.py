@@ -34,7 +34,8 @@ class Knight:
     def move(self, new_pose):
         self.position = new_pose
 
-
+    def remove(self):
+        self.position = [-1, -1]
 
 
 class Rook:
@@ -70,7 +71,8 @@ class Rook:
     def move(self, new_pose):
         self.position = new_pose
 
-
+    def remove(self):
+        self.position = [-1, -1]
 
 class Bishop:
     def __init__(self, pose, color):
@@ -104,6 +106,9 @@ class Bishop:
     
     def move(self, new_pose):
         self.position = new_pose
+
+    def remove(self):
+        self.position = [-1, -1]
 
 
 class Queen:
@@ -139,6 +144,9 @@ class Queen:
     def move(self, new_pose):
         self.position = new_pose
 
+    def remove(self):
+        self.position = [-1, -1]
+
 
 class King:
     def __init__(self, pose, color):
@@ -165,22 +173,78 @@ class King:
     def move(self, new_pose):
         self.position = new_pose
 
+    def remove(self):
+        self.position = [-1, -1]
 
+
+class Pawn:
+    def __init__(self, pose, color):
+        self.position = pose
+        self.color = Color[color]
+
+    def possible_moves(self, board):
+        x = self.position[0]
+        y = self.position[1]
+        size = len(board)
+        captures = []
+        free_moves = []
+
+        if self.color.name == 'white':                              # white figures are always on 1st and 2nd row
+            if x - 1 >= 0:
+                content = board[x-1][y]                             # white pawns always go to higher rows
+                if content == 0:
+                    free_moves.append([x-1, y])
+                    if self.position[0] == size - 2:                # if a pawn hasn't moved yet, it can make a double move
+                        content = board[x-2][y]
+                        if content == 0:
+                            free_moves.append([x-2, y])
+            if y - 1 >= 0:                                          # captures differently than moves
+                content = board[x-1][y-1]
+                if content == Color.black.value:
+                    captures.append([x-1, y-1])
+            if y + 1 < size:
+                content = board[x-1][y+1]
+                if content == Color.black.value:
+                    captures.append([x-1, y+1])
+        else:                                                       # black figures are always on 7th and 8th row
+            if x + 1 < size:
+                content = board[x+1][y]
+                if content == 0:                                    # black pawns always go to lower rows
+                    free_moves.append([x+1, y])
+                    if self.position[0] == 1:                       # if a pawn hasn't moved yet, it can make a double move
+                        content = board[x+2][y]
+                        if content == 0:
+                            free_moves.append([x+2, y])
+            if y - 1 >= 0:
+                content = board[x+1][y-1]
+                if content == Color.white.value:
+                    captures.append([x+1, y-1])
+            if y + 1 < size:
+                content = board[x+1][y+1]
+                if content == Color.white.value:
+                    captures.append([x+1, y+1])
+        
+        return free_moves, captures
+    
+    def move(self, new_pose):
+        self.position = new_pose
+
+    def remove(self):
+        self.position = [-1, -1]
 
 
 
 x = [
-    [2, 0, 0, 0, 1],
-    [0, 0, 2, 0, 0], 
-    [0, 1, 2, 0, 1],
-    [0, 2, 0, 0, 0],
-    [0, 0, 0, 0, 1]
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 0], 
+    [0, 0, 2, 0, 1],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0]
     ]
 
-r = Rook([2, 2], 'black')
-b = Bishop([0, 0], 'black')
-k = King([2, 2], 'black')
-pos, cap = k.possible_moves(x)
+p = Pawn([1, 3], 'black')
+print(p.color)
+pos, cap = p.possible_moves(x)
 print(pos)
 print(cap)
 
