@@ -58,12 +58,10 @@ class Board:
 
     def apply_figs(self):
         self.clear_matrix()
-        for i in self.white_figures:
-            if i.position != [-1, -1]:
-                self.matrix[i.position[0]][i.position[1]] = Color.white.value
-        for j in self.black_figures:
-            if j.position != [-1, -1]:
-                self.matrix[j.position[0]][j.position[1]] = Color.black.value
+        all_figures = self.white_figures + self.black_figures
+        for fig in all_figures:
+            if fig.position != [-1, -1]:
+                self.matrix[fig.position[0]][fig.position[1]] = fig.color.value
 
     def clear_matrix(self):
         self.matrix = np.zeros((self.size, self.size), dtype=int)
