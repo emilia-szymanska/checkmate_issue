@@ -39,10 +39,14 @@ if __name__ == "__main__":
                         board.black_king = black_king
     
     
-    sol = checkmate(board, 'white')
-
-    sol2 = checkmate(board, 'black')
-
-    print(sol)
-    print(sol2)
+    solution = checkmate(board, 'white')
+    win_color = 'white'
+    if len(solution) == 0:
+        solution = checkmate(board, 'black')
+        win_color = 'black'
+    
+    for sol in solution:
+        letter_begin = chr(ord('A') + sol[0].position[1]) 
+        letter_end = chr(ord('A') + sol[1][1]) 
+        print("Move your " + win_color + " figure from " + letter_begin + str(SIZE - sol[0].position[0]) + " to " + letter_end + str(SIZE - sol[1][0]))
 
