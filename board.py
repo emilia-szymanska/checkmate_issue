@@ -10,7 +10,8 @@ class Board:
         self.black_figures = []
         self.matrix = np.zeros((size, size), dtype=int)
         self.tmp = np.zeros((size, size), dtype=int)
-
+        self.black_king = King([-1, -1], 'black')
+        self.white_king = King([-1, -1], 'white')
 
     def add_figure(self, new_figure):
         if new_figure.color.name == 'white':

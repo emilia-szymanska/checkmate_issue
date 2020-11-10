@@ -2,26 +2,36 @@
 
 from board import *
 
-def checkmate(board, color, black_king):
+def checkmate(board, color):
+    if color == 'white':    
+        check_fig = board.white_figures
+        ref_fig = board.black_figures
+        check_col = Color.white
+        ref_col = Color.black
+        ref_king = board.black_king 
+    else:
+        check_fig = board.black_figures
+        ref_fig = board.white_figures
+        check_col = Color.black
+        ref_col = Color.white
+        ref_king = board.white_king 
     
-    check_fig = board.white_figures
-    ref_fig = board.black_figures
+    king_x = ref_king.position[0]
+    king_y = ref_king.position[1]
+
     solution = []
     is_safe = False
     
-    king_x = black_king.position[0]
-    king_y = black_king.position[1]
-
-    for fig in check_fig:                                                                               # for every white figure X
+    for fig in check_fig:
         is_safe = False
         board.apply_figs()
-        moves, captures = fig.possible_moves(board.matrix)                                          # take its possible moves
+        moves, captures = fig.possible_moves(board.matrix) 
         all_moves = moves + captures
         previous = fig.position
-        for mov in all_moves:                                                                          # and for every move
+        for mov in all_moves:
             captured, fig_captured = board.move_figure(fig, mov) 
-            board.apply_net('white')
-            if board.tmp[king_x][king_y] == Color.white.value:
+            board.apply_net(check_col.name)
+            if board.tmp[king_x][king_y] == check_col.value:
                 for i in range(len(ref_fig)):
                     if is_safe:
                         is_safe = False
@@ -36,8 +46,8 @@ def checkmate(board, color, black_king):
                             solution.append([fig, mov])
                         for j in range(len(ref_total)):
                             check_captured, check_fig_captured = board.move_figure(ref_fig[i], (ref_total[j]))                                
-                            board.apply_net('white')
-                            if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
+                            board.apply_net(check_col.name)
+                            if board.tmp[ref_king.position[0]][ref_king.position[1]] != check_col.value:      # if black king is not endangered => safe
                                 ref_fig[i].move(ref_previous)        
                                 is_safe = True
                                 fig.move(previous)
@@ -84,10 +94,17 @@ if __name__ == "__main__":
                      if color == 'white':
                         white_king = King([i, j], color)
                         board.add_figure(white_king)
+                        board.white_king = white_king
                      else:
-                         black_king = King([i, j], color)
-                         board.add_figure(black_king)
+                        black_king = King([i, j], color)
+                        board.add_figure(black_king)
+                        board.black_king = black_king
+    
+    
+    sol = checkmate(board, 'white')
 
-    sol = checkmate(board, 'white', black_king)
+    sol2 = checkmate(board, 'black')
+
     print(sol)
+    print(sol2)
 
