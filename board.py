@@ -27,14 +27,12 @@ class Board:
             figs = self.black_figures
         else:
             figs = self.white_figures
-        
         for fig in figs:
             if fig.position == new_pose:
                 fig.remove()
                 fig_captured = fig
                 captured = True
                 break
-        
         return captured, fig_captured
 
     def apply_net(self, color):
@@ -83,8 +81,4 @@ class Board:
     def clear_net(self):
         self.clear_matrix()
         self.tmp = np.zeros((self.size, self.size), dtype=int)
-
-
-    def print_matrix(self):
-        print(self.matrix)
 
