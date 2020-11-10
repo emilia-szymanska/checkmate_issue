@@ -37,34 +37,24 @@ class Board:
 
     def apply_net(self, color):
         self.clear_net()
-        if color == Color.white.name:
-            for i in self.black_figures:
-                if i.position != [-1, -1]:
-                    self.tmp[i.position[0]][i.position[1]] = Color.black.value
-                    self.matrix[i.position[0]][i.position[1]] = Color.black.value
-            for j in self.white_figures:
-                if j.position != [-1, -1]:
-                    self.matrix[j.position[0]][j.position[1]] = Color.white.value
-                    self.tmp[j.position[0]][j.position[1]] = Color.white.value
-                    avail_moves, captures = j.possible_moves(self.matrix)
-                    for k in avail_moves:
-                        self.tmp[k[0]][k[1]] = Color.white.value
-                    for l in captures:
-                        self.tmp[l[0]][l[1]] = Color.white.value
-        else:
-            for i in self.white_figures:
-                if i.position != [-1, -1]:
-                    self.tmp[i.position[0]][i.position[1]] = Color.white.value
-                    self.matrix[i.position[0]][i.position[1]] = Color.white.value
-            for j in self.black_figures:
-                if j.position != [-1, -1]:
-                    self.tmp[j.position[0]][j.position[1]] = Color.black.value
-                    self.matrix[j.position[0]][j.position[1]] = Color.black.value
-                    avail_moves, captures = j.possible_moves(self.matrix)
-                    for k in avail_moves:
-                        self.tmp[k[0]][k[1]] = Color.black.value
-                    for l in captures:
-                        self.tmp[l[0]][l[1]] = Color.black.value
+        all_figures = self.black_figures + self.white_figures
+        for fig in all_figures:
+            if fig.position != [-1, -1]:
+                x = fig.position[0]
+                y = fig.position[1]
+                self.tmp[x][y] = fig.color.value
+                self.matrix[x][y] = fig.color.value
+        if color == 'white':
+            ref_fig = self.white_figures
+        else: 
+            ref_fig = self.black_figures
+        for fig in ref_fig:
+            if fig.position != [-1, -1]:
+                avail_moves, captures = fig.possible_moves(self.matrix)
+                for k in avail_moves:
+                    self.tmp[k[0]][k[1]] = fig.color.value
+                for l in captures:
+                    self.tmp[l[0]][l[1]] = fig.color.value
 
     def apply_figs(self):
         self.clear_matrix()

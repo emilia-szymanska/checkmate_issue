@@ -74,6 +74,7 @@ class Rook:
     def remove(self):
         self.position = [-1, -1]
 
+
 class Bishop:
     def __init__(self, pose, color):
         self.position = pose
@@ -198,7 +199,7 @@ class Pawn:
                         content = board[x-2][y]
                         if content == 0:
                             free_moves.append([x-2, y])
-                if y - 1 >= 0:                                          # captures differently than moves
+                if y - 1 >= 0:                                      # captures differently than moves
                     content = board[x-1][y-1]
                     if content == Color.black.value:
                         captures.append([x-1, y-1])
