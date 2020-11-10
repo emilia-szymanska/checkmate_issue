@@ -60,65 +60,72 @@ if __name__ == "__main__":
         moves, captures = fig.possible_moves(board.matrix)                                          # take its possible moves
         totals = moves + captures
         previous = fig.position
-#        print("#" * 10)
-#        print("Which figure now")
-#        print(fig)
-#        print(totals)
-#        print("#" * 10)
         for mov in totals:                                                                          # and for every move
-            fig.move(mov)                                                                           
+            captured, fig_captured = board.move_figure(fig, mov) 
             board.apply_net('white')
             if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
-            #    print("King not endangered")
-            #    print(fig)
-            #    print(mov)
                 pass
             else:                                                                                   # if it is endangered
                 for i in range(len(b_fig)):
                     if is_safe == True:
                         is_safe = False
-#                        print("OK")
                         break
-                    board.apply_figs()
-                    b_moves, b_captures = b_fig[i].possible_moves(board.matrix)
-                    b_previous = b_fig[i].position
-                    b_total = b_moves + b_captures
- #                   print(fig)
- #                   print(mov)
- #                   print(b_fig[i])
- #                   print(b_total)
-                    last = b_fig[-1]
-                    if b_fig[i] == last and len(b_total) == 0:
-                        print("*" * 10)
-                        print("Check mate!!!")
-                        print(fig)
-                        print(mov)
-                        print("*" * 10)
-                        sol.append([fig, mov])
-                    for j in range(len(b_total)):
-                        b_fig[i].move(b_total[j])
-                        board.apply_net('white')
-  #                      print("Konkretny ruch:")
-  #                      print(b_fig[i])
-  #                      print(b_total[j])
-                        if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
-   #                         print("King can be saved")
-   #                         print(fig)
-   #                         print(mov)
+                    if b_fig[i] != fig_captured:
+                        board.apply_figs()
+                        b_moves, b_captures = b_fig[i].possible_moves(board.matrix)
+                        b_previous = b_fig[i].position
+                        b_total = b_moves + b_captures
+                        last = b_fig[-1]
+                        if b_fig[i] == last and len(b_total) == 0:
+                            print("*" * 10)
+                            print("Check mate!!!")
+                            print(fig)
+                            print(mov)
+                            print("*" * 10)
+                            sol.append([fig, mov])
+                        for j in range(len(b_total)):
+                            w_captured, w_fig_captured = board.move_figure(b_fig[i], (b_total[j]))                                
+                            board.apply_net('white')
+                            if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
+                                b_fig[i].move(b_previous)        
+                                is_safe = True
+                                fig.move(previous)
+                                break
+                            else:
+                                if b_fig[i] == last and j == len(b_total) - 1:
+                                    print("*" * 10)
+                                    print("Check mate!!!")
+                                    print(fig)
+                                    print(mov)
+                                    print("*" * 10)
+                                    sol.append([fig, mov])
+                            if w_captured == True:
+                                w_fig_captured.move(b_total[j])
                             b_fig[i].move(b_previous)        
-                            is_safe = True
-                            fig.move(previous)
-                            break
-                        else:
-                            if b_fig[i] == last and j == len(b_total) - 1:
-                                print("*" * 10)
-                                print("Check mate!!!")
-                                print(fig)
-                                print(mov)
-                                print("*" * 10)
-                                sol.append([fig, mov])
-                        b_fig[i].move(b_previous)        
+            if captured == True:
+                fig_captured.move(mov)
             fig.move(previous)
 
 
 
+
+
+ #                   print(fig)
+ #                   print(mov)
+ #                   print(b_fig[i])
+ #                   print(b_total)
+
+            #    print("King not endangered")
+            #    print(fig)
+            #    print(mov)
+#        print("#" * 10)
+#        print("Which figure now")
+#        print(fig)
+#        print(totals)
+#        print("#" * 10)
+   #                         print("King can be saved")
+   #                         print(fig)
+  #                         print(mov)
+  #                      print("Konkretny ruch:")
+  #                      print(b_fig[i])
+  #                      print(b_total[j])
