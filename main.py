@@ -52,12 +52,19 @@ if __name__ == "__main__":
     w_fig = board.white_figures
     b_fig = board.black_figures
     sol = []
-    
+    is_safe = False
+
     for fig in w_fig:                                                                               # for every white figure X
+        is_safe = False
         board.apply_figs()
         moves, captures = fig.possible_moves(board.matrix)                                          # take its possible moves
         totals = moves + captures
         previous = fig.position
+#        print("#" * 10)
+#        print("Which figure now")
+#        print(fig)
+#        print(totals)
+#        print("#" * 10)
         for mov in totals:                                                                          # and for every move
             fig.move(mov)                                                                           
             board.apply_net('white')
@@ -68,11 +75,18 @@ if __name__ == "__main__":
                 pass
             else:                                                                                   # if it is endangered
                 for i in range(len(b_fig)):
+                    if is_safe == True:
+                        is_safe = False
+#                        print("OK")
+                        break
+                    board.apply_figs()
                     b_moves, b_captures = b_fig[i].possible_moves(board.matrix)
                     b_previous = b_fig[i].position
                     b_total = b_moves + b_captures
-                    print(b_fig[i])
-                    print(b_total)
+ #                   print(fig)
+ #                   print(mov)
+ #                   print(b_fig[i])
+ #                   print(b_total)
                     last = b_fig[-1]
                     if b_fig[i] == last and len(b_total) == 0:
                         print("*" * 10)
@@ -84,11 +98,16 @@ if __name__ == "__main__":
                     for j in range(len(b_total)):
                         b_fig[i].move(b_total[j])
                         board.apply_net('white')
+  #                      print("Konkretny ruch:")
+  #                      print(b_fig[i])
+  #                      print(b_total[j])
                         if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
-                        #    print("King can be saved")
-                        #    print(fig)
-                        #    print(mov)
+   #                         print("King can be saved")
+   #                         print(fig)
+   #                         print(mov)
                             b_fig[i].move(b_previous)        
+                            is_safe = True
+                            fig.move(previous)
                             break
                         else:
                             if b_fig[i] == last and j == len(b_total) - 1:
