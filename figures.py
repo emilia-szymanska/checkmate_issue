@@ -198,14 +198,14 @@ class Pawn:
                         content = board[x-2][y]
                         if content == 0:
                             free_moves.append([x-2, y])
-            if y - 1 >= 0:                                          # captures differently than moves
-                content = board[x-1][y-1]
-                if content == Color.black.value:
-                    captures.append([x-1, y-1])
-            if y + 1 < size:
-                content = board[x-1][y+1]
-                if content == Color.black.value:
-                    captures.append([x-1, y+1])
+                if y - 1 >= 0:                                          # captures differently than moves
+                    content = board[x-1][y-1]
+                    if content == Color.black.value:
+                        captures.append([x-1, y-1])
+                if y + 1 < size:
+                    content = board[x-1][y+1]
+                    if content == Color.black.value:
+                        captures.append([x-1, y+1])
         else:                                                       # black figures are always on 7th and 8th row
             if x + 1 < size:
                 content = board[x+1][y]
@@ -215,14 +215,14 @@ class Pawn:
                         content = board[x+2][y]
                         if content == 0:
                             free_moves.append([x+2, y])
-            if y - 1 >= 0:
-                content = board[x+1][y-1]
-                if content == Color.white.value:
-                    captures.append([x+1, y-1])
-            if y + 1 < size:
-                content = board[x+1][y+1]
-                if content == Color.white.value:
-                    captures.append([x+1, y+1])
+                if y - 1 >= 0:
+                    content = board[x+1][y-1]
+                    if content == Color.white.value:
+                        captures.append([x+1, y-1])
+                if y + 1 < size:
+                    content = board[x+1][y+1]
+                    if content == Color.white.value:
+                        captures.append([x+1, y+1])
         
         return free_moves, captures
     
