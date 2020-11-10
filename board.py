@@ -13,14 +13,10 @@ class Board:
 
 
     def add_figure(self, new_figure):
-#        x = new_figure.position[0]
-#        y = new_figure.position[1]
         if new_figure.color.name == 'white':
             self.white_figures.append(new_figure)
-#            self.matrix[x][y] = Color.white.value
         else:
             self.black_figures.append(new_figure)
-#            self.matrix[x][y] = Color.black.value
 
     def move_figure(self, figure, new_pose):
         figure.move(new_pose)
@@ -91,5 +87,3 @@ class Board:
     def print_matrix(self):
         print(self.matrix)
 
-
-#    def remove_figure(self, removed_figure):
