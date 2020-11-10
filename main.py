@@ -35,9 +35,6 @@ if __name__ == "__main__":
                      else:
                          black_king = King([i, j], color)
                          board.add_figure(black_king)
-    print(board.white_figures)
-    print(board.black_figures)
-
 
 #    bp = Pawn([5, 1], 'black')
 #    wp = Pawn([6, 7], 'white')
@@ -53,48 +50,56 @@ if __name__ == "__main__":
 #    board.add_figure(wq)
 
     w_fig = board.white_figures
-
-#    board.apply_net('white')
-#    board.print_matrix()
-
-#    print(board.tmp)
+    b_fig = board.black_figures
+    sol = []
     
-    for fig in w_fig:
+    for fig in w_fig:                                                                               # for every white figure X
         board.apply_figs()
-        moves, captures = fig.possible_moves(board.matrix)
+        moves, captures = fig.possible_moves(board.matrix)                                          # take its possible moves
         totals = moves + captures
         previous = fig.position
-        board.clear_matrix()
-        for mov in totals:
-            fig.move(mov)
+        for mov in totals:                                                                          # and for every move
+            fig.move(mov)                                                                           
             board.apply_net('white')
-            if board.tmp[black_king.position[0]][black_king.position[1]] == Color.white.value:
-                king_moves, king_captures = black_king.possible_moves(board.matrix)
- #               if len(king_moves) == 0:
-                                                            
-
-                print(fig)
-                print(fig.position)
-                print("***************")
-                
-
-            board.clear_net()
+            if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
+            #    print("King not endangered")
+            #    print(fig)
+            #    print(mov)
+                pass
+            else:                                                                                   # if it is endangered
+                for i in range(len(b_fig)):
+                    b_moves, b_captures = b_fig[i].possible_moves(board.matrix)
+                    b_previous = b_fig[i].position
+                    b_total = b_moves + b_captures
+                    print(b_fig[i])
+                    print(b_total)
+                    last = b_fig[-1]
+                    if b_fig[i] == last and len(b_total) == 0:
+                        print("*" * 10)
+                        print("Check mate!!!")
+                        print(fig)
+                        print(mov)
+                        print("*" * 10)
+                        sol.append([fig, mov])
+                    for j in range(len(b_total)):
+                        b_fig[i].move(b_total[j])
+                        board.apply_net('white')
+                        if board.tmp[black_king.position[0]][black_king.position[1]] != Color.white.value:      # if black king is not endangered => safe
+                        #    print("King can be saved")
+                        #    print(fig)
+                        #    print(mov)
+                            b_fig[i].move(b_previous)        
+                            break
+                        else:
+                            if b_fig[i] == last and j == len(b_total) - 1:
+                                print("*" * 10)
+                                print("Check mate!!!")
+                                print(fig)
+                                print(mov)
+                                print("*" * 10)
+                                sol.append([fig, mov])
+                        b_fig[i].move(b_previous)        
             fig.move(previous)
-    
 
-#    def apply_figs(self):
-#    def clear_matrix(self):
-#    def clear_tmp(self):
-#    def apply_net(self, color):
 
-    #def move(self, new_pose):
-    #def remove(self):
-    #pos, cap = p.possible_moves(x)
-    #print(pos)
-    #print(cap)
 
-#        if fig == wq:
-#            print(moves)
-#            print(captures)
-#            print(totals)
-#            print(board.matrix)

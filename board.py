@@ -13,8 +13,8 @@ class Board:
 
 
     def add_figure(self, new_figure):
-        x = new_figure.position[0]
-        y = new_figure.position[1]
+#        x = new_figure.position[0]
+#        y = new_figure.position[1]
         if new_figure.color.name == 'white':
             self.white_figures.append(new_figure)
 #            self.matrix[x][y] = Color.white.value
@@ -24,6 +24,7 @@ class Board:
 
 
     def apply_net(self, color):
+        self.clear_net()
         if color == Color.white.name:
             for i in self.black_figures:
                 self.tmp[i.position[0]][i.position[1]] = Color.black.value
@@ -50,6 +51,7 @@ class Board:
                     self.tmp[l[0]][l[1]] = Color.black.value
 
     def apply_figs(self):
+        self.clear_matrix()
         for i in self.white_figures:
             self.matrix[i.position[0]][i.position[1]] = Color.white.value
         for j in self.black_figures:
